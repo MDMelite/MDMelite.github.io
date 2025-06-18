@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Thumbnails
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+
+# Dependencies (if you add any in the future)
+node_modules/
+
+# Build output (if you add build tools in the future)
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Backup files
+*.backup
+*.bak
+
+# Environment variables (if you add any)
+.env
+.env.local

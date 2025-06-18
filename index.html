@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Child of Comedy - A Novel by D. Moberg</title>
+    <meta name="description" content="Three comedians walk into a bar. Two are legends. One is their son. This must be some kind of joke. A darkly funny father-son story by D. Moberg.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Custom Properties */
+        :root {
+            --charcoal-black: #1a1a1a;
+            --brick-red: #8B4513;
+            --cream: #FAF0E6;
+            --gold: #FFD700;
+            --gold-dark: #F0C000;
+            --gold-muted: #D4A574;  /* Muted gold for reader */
+            --text-primary: #F5E6D3; /* Warm cream with hint of gold */
+            --text-gold: #FFDDA6; /* Warmer golden cream - nudged toward yellow */
+            --text-gold-nav: #FFE0B0; /* Slightly warmer for nav/hero */
+        }
+
+        /* Base Styles */
+        body {
+            background-color: var(--charcoal-black);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Clean up any stray elements */
+        img:not([src]), img[src=""] {
+            display: none;
+        }
+
+        /* Typography */
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation Glass Effect */
+        .nav-glass {
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styles */
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4A574 0%, #B8956A 100%);
+            color: var(--charcoal-black);
+            transition: all 0.3s ease;
+        }
+
+        .gold-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+            background: linear-gradient(135deg, #E0B584 0%, #C4A178 100%);
+        }
+
+        /* Navigation Links */
+        .nav-link {
+            color: var(--text-gold-nav);
+        }
+
+        /* Glow Effects */
+        .text-glow {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .text-glow:hover {
+            text-shadow: 
+                0 0 16px rgba(255, 215, 0, 0.6),
+                0 0 32px rgba(255, 215, 0, 0.3),
+                1px 1px 2px rgba(255, 215, 0, 0.5),
+                -1px -1px 2px rgba(255, 215, 0, 0.5),
+                2px 2px 3px rgba(0, 0, 0, 0.4);
+            transform: scale(1.04);
+            color: var(--gold) !important;
+        }
+
+        /* Glass Card Effect */
+        .glass-card {
+            background: rgba(26, 26, 26, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(26, 26, 26, 0.6);
+            border-color: rgba(255, 215, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Video Background */
+        .video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 105%; /* Slightly larger for subtle parallax */
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Quote Carousel */
+        .quote-carousel {
+            position: relative;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .quote-item {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            left: 0;
+            top: 0;
+        }
+
+        .quote-item.active {
+            opacity: 1;
+        }
+
+        /* Parallax Effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Loading Animation */
+        .loader {
+            border-top-color: var(--gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        /* Ensure loader doesn't block after load */
+        body.loaded #loader {
+            display: none !important;
+            pointer-events: none !important;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Gerald Animation */
+        @keyframes swim {
+            0% { 
+                left: -200px;
+                bottom: 20%;
+                transform: rotate(0deg);
+            }
+            25% {
+                bottom: 40%;
+                transform: rotate(-10deg);
+            }
+            50% {
+                bottom: 30%;
+                transform: rotate(5deg);
+            }
+            75% {
+                bottom: 50%;
+                transform: rotate(-5deg);
+            }
+            100% { 
+                left: calc(100% + 200px);
+                bottom: 40%;
+                transform: rotate(0deg);
+            }
+        }
+
+        #gerald {
+            position: fixed;
+            width: 150px;
+            left: -200px;
+            bottom: -200px;
+            z-index: 9999;
+            filter: drop-shadow(0 0 10px #0ff);
+            opacity: 0;
+        }
+
+        #gerald.swimming {
+            opacity: 1;
+            animation: swim 8s linear;
+        }
+
+        /* Waveform Animation */
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .waveform {
+            background-image: repeating-linear-gradient(
+                90deg,
+                var(--gold-muted) 0px,
+                var(--gold-muted) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            height: 60px;
+            opacity: 0.2;
+            animation: wave 3s linear infinite;
+        }
+
+        /* Animated Typewriter Banner */
+        #representation-banner {
+            position: fixed;
+            top: 64px; /* Just below navigation - adjusted for actual nav height */
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #D4A574 0%, #B8956A 100%);
+            color: var(--charcoal-black);
+            z-index: 35; /* Below nav (40) */
+            padding: 0.75rem 0;
+            transform: translateY(-150%);
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.1),      /* Subtle close shadow */
+                0 4px 8px rgba(0, 0, 0, 0.15),     /* Mid shadow */
+                0 8px 16px rgba(0, 0, 0, 0.2),     /* Deeper shadow */
+                0 16px 32px rgba(0, 0, 0, 0.25),   /* Far shadow */
+                0 24px 48px rgba(0, 0, 0, 0.3),    /* Furthest shadow */
+                inset 0 1px 0 rgba(255, 255, 255, 0.1), /* Top inner highlight */
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);      /* Bottom inner shadow */
+            border-bottom: 1px solid rgba(139, 107, 70, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        #representation-banner.visible {
+            transform: translateY(0) !important;
+        }
+
+        #representation-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%, 
+                rgba(0, 0, 0, 0.05) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #representation-banner:hover {
+            background: linear-gradient(135deg, #E0B584 0%, #C4A178 100%);
+            box-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.12),
+                0 6px 12px rgba(0, 0, 0, 0.17),
+                0 12px 24px rgba(0, 0, 0, 0.22),
+                0 24px 48px rgba(0, 0, 0, 0.27),
+                0 36px 72px rgba(0, 0, 0, 0.32),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
+        
+        .typewriter-container {
+            flex-grow: 1;
+            text-align: center;
+            user-select: none;
+            position: relative;
+            z-index: 2;
+        }
+        
+        #typewriter-text {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            display: inline-block;
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: var(--charcoal-black);
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .banner-close-btn {
+            background: none;
+            border: none;
+            color: var(--charcoal-black);
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s, transform 0.2s;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-close-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .banner-spacer {
+            width: 60px;
+            flex-shrink: 0;
+        }
+
+        /* Sample Chapter Modal Styles */
+
+        /* Modal container specific styles */
+        .modal-container {
+            background: var(--cream);
+            color: var(--charcoal-black);
+            height: calc(100vh - 40px);
+            max-height: 900px;
+        }
+
+        /* Dark mode for modal */
+        .dark-mode .modal-container {
+            background: var(--charcoal-black);
+            color: var(--text-primary);
+        }
+
+        /* Chapter text styling */
+        .chapter-text {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+        }
+
+        .dark-mode .chapter-text {
+            color: var(--text-primary);
+        }
+
+        /* Two-column layout for desktop */
+        @media (min-width: 1024px) {
+            .chapter-text {
+                column-count: 2;
+                column-gap: 3rem;
+                column-rule: 1px solid rgba(255, 215, 0, 0.1);
+            }
+        }
+
+        /* Ensure content doesn't break awkwardly */
+        .chapter-text p {
+            margin-bottom: 1.5rem;
+            break-inside: avoid;
+        }
+
+        /* Chapter title styling */
+        .chapter-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal-black);
+            break-after: avoid;
+            column-span: all;
+        }
+
+        .dark-mode .chapter-text h1 {
+            color: var(--gold-muted);
+        }
+
+        .chapter-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 3rem;
+            column-span: all;
+        }
+
+        .dark-mode .chapter-text h2 {
+            color: var(--text-gold);
+        }
+
+        /* Drop cap for first paragraph */
+        .chapter-text > p:first-of-type::first-letter {
+            font-size: 4rem;
+            float: left;
+            line-height: 1;
+            margin-right: 0.5rem;
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+            color: var(--gold-muted);
+        }
+
+        /* Chapter button states */
+        .chapter-btn.active {
+            background-color: var(--gold-muted);
+            color: var(--charcoal-black);
+            border-color: var(--gold-muted);
+        }
+
+        /* Copyright section styling */
+        .chapter-copyright {
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        .copyright-divider {
+            border: none;
+            border-top: 1px solid rgba(212, 165, 116, 0.3);
+            margin: 2rem auto;
+            width: 50%;
+        }
+
+        .copyright-text {
+            font-size: 0.8em;
+            font-style: italic;
+            color: rgba(51, 51, 51, 0.7);
+            text-align: center;
+            line-height: 1.6;
+            padding: 0 2rem;
+        }
+
+        .dark-mode .copyright-text {
+            color: rgba(248, 245, 235, 0.6);
+        }
+
+        .dark-mode .copyright-divider {
+            border-top-color: rgba(212, 165, 116, 0.2);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .modal-container {
+                inset: 0;
+                border-radius: 0;
+                height: 100vh;
+                max-height: 100vh;
+            }
+
+            .chapter-text {
+                font-size: 1rem;
+                text-align: left;
+                padding: 1.5rem !important;
+            }
+
+            .chapter-text h1 {
+                font-size: 2rem;
+            }
+
+            .chapter-text h2 {
+                font-size: 1.25rem;
+                margin-bottom: 2rem;
+            }
+
+            .reader-controls button {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Smooth transitions */
+        .modal-container, .chapter-text, .chapter-btn {
+            transition: all 0.3s ease;
+        }
+
+        /* Loading state */
+        .chapter-text.loading {
+            opacity: 0.5;
+        }
+
+        /* Scrollbar styling for modal */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: rgba(212, 165, 116, 0.1);  /* Using muted gold with transparency */
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--gold-muted);
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #B8956A;  /* Darker muted gold on hover */
+        }
+
+        /* Focus styles for accessibility */
+        .modal-container button:focus-visible {
+            outline: 2px solid var(--gold-muted);
+            outline-offset: 2px;
+        }
+
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        /* Emergency loader fix - hide immediately */
+        #loader {
+            display: none !important;
+        }
+    </style>
+    
+    <!-- Audio Player CSS -->
+    <link rel="stylesheet" href="audio-player.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 bg-charcoal-black z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-cream border-t-gold rounded-full loader mx-auto mb-4"></div>
+            <p class="text-cream">Loading the show...</p>
+        </div>
+    </div>
+
+    <!-- [0] Fixed Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-40 nav-glass transition-all duration-300">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--text-gold-nav);">THE CHILD OF COMEDY</h1>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#story" class="text-glow nav-link">The Story</a>
+                    <a href="#book" class="text-glow nav-link">The Book</a>
+                    <a href="#audiobook" class="text-glow nav-link">Listen</a>
+                    <a href="#watch" class="text-glow nav-link">Watch</a>
+                    <a href="#television" class="text-glow nav-link">Television</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden" style="color: var(--text-gold-nav);">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <a href="#story" class="block py-2 hover:text-gold transition-colors" style="color: var(--text-gold-nav);">The Story</a>
+                <a href="#book" class="block py-2 hover:text-gold transition-colors" style="color: var(--text-gold-nav);">The Book</a>
+                <a href="#audiobook" class="block py-2 hover:text-gold transition-colors" style="color: var(--text-gold-nav);">Listen</a>
+                <a href="#watch" class="block py-2 hover:text-gold transition-colors" style="color: var(--text-gold-nav);">Watch</a>
+                <a href="#television" class="block py-2 hover:text-gold transition-colors" style="color: var(--text-gold-nav);">Television</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Typewriter Banner -->
+    <div id="representation-banner">
+        <div class="banner-spacer"></div>
+        <div class="typewriter-container">
+            <span id="typewriter-text"></span>
+            <span class="blinking-cursor"></span>
+        </div>
+        <button id="close-banner-btn" class="banner-close-btn" aria-label="Close banner">&times;</button>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- [1] Hero Section -->
+        <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <!-- Video Background -->
+            <video autoplay muted loop playsinline class="video-bg">
+                <source src="assets/stevie_brick_wall.mp4" type="video/mp4">
+                <!-- Fallback image -->
+                <img src="assets/cover_the_child_of_comedy.png" alt="Background">
+            </video>
+            
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 text-center px-4">
+                <div id="stevie-click" class="mb-8 cursor-pointer inline-block">
+                    <img src="https://storage.googleapis.com/gemini-prod/images/05f24259-7e44-4860-934c-f1791244e8a4" 
+                         alt="" 
+                         class="w-48 md:w-64 lg:w-80 mx-auto filter drop-shadow-2xl hover:scale-105 transition-transform duration-300">
+                </div>
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl mb-6 font-bold" style="color: var(--text-gold-nav); text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                    THE CHILD<br>OF COMEDY
+                </h1>
+                <p class="text-xl md:text-2xl mb-12" style="color: var(--text-primary); opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">A Novel by D. Moberg</p>
+                
+                <!-- Scroll Indicator -->
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+                    <div class="animate-bounce">
+                        <svg class="w-8 h-8" style="color: var(--text-gold-nav); opacity: 0.7;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- [2] Secondary Hero - The Story -->
+        <section id="story" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <!-- Video Background with Parallax -->
+            <div class="absolute inset-0 parallax">
+                <video autoplay muted loop playsinline class="video-bg">
+                    <source src="assets/Janets_ghostly_visit.mp4" type="video/mp4">
+                </video>
+            </div>
+            
+            <!-- Lighter Overlay for better video visibility -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 container mx-auto px-6 py-20 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-8 font-bold" style="text-shadow: 0 2px 8px rgba(0,0,0,0.7);">The Story</h2>
+                    <p class="text-2xl md:text-3xl lg:text-4xl text-white/95 italic mb-12 leading-relaxed" style="text-shadow: 0 2px 6px rgba(0,0,0,0.6);">
+                        Three comedians walk into a bar. Two are legends. One is their son. This must be some kind of joke.
+                    </p>
+                    <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto mb-8" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
+                        Stevie Wright is a struggling comedian with his father's (Steven Wright) timing, but none of his own punchlines. His life is upended when a long-buried secret is revealed: his other father is the legendary Andrew Dice Clay. Now, Stevie must become the bridge between two comedy icons who haven't spoken in thirty years.
+                    </p>
+                    <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto mb-8" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
+                        Thrown into the orbit of two icons who haven't spoken since the night he was conceived, Stevie must do more than just find his own voice; he must survive becoming the bridge between his fathers' thirty years of silence. The story unfolds in a symphony of voices—from Mike, the sardonic manager who orchestrates the chaos; to Stevie himself, the son turning pain into punchlines; to an all-knowing narrator who reveals the one story none of them can tell.
+                    </p>
+                    <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
+                        <em>The Child of Comedy</em> is a darkly funny and moving father-son story about family, identity, and finding your own voice in the space between silence and a roar.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- [3] The Book -->
+        <section id="book" class="py-20 md:py-32 relative overflow-hidden">
+            <!-- Brick Wall Background -->
+            <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/brick-wall.png'), linear-gradient(to bottom, var(--brick-red), var(--charcoal-black));"></div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Book Details (moved to left) -->
+                    <div class="order-2 md:order-1 md:text-right">
+                        <h2 class="font-serif text-4xl md:text-5xl text-cream mb-6 font-bold">The Book</h2>
+                        <p class="text-2xl text-gold mb-4">$28.99 Hardcover</p>
+                        <p class="text-cream/80 mb-8 leading-relaxed">
+                            This first edition hardcover features exclusive cover art and a foreword by the author. 
+                            A masterful narrative that blurs the line between comedy and tragedy, reality and performance.
+                        </p>
+                        
+                        <!-- Review Quotes Carousel -->
+                        <div class="quote-carousel mb-8 text-center md:text-right">
+                            <p class="quote-item active text-xl italic text-cream/90">
+                                "A masterful narrative voice... the book's greatest asset."
+                            </p>
+                            <p class="quote-item text-xl italic text-cream/90">
+                                "Hilarious, heartbreaking, and ultimately hopeful."
+                            </p>
+                            <p class="quote-item text-xl italic text-cream/90">
+                                "The humor doesn't undercut the emotion; it sharpens it."
+                            </p>
+                            <p class="quote-item text-xl italic text-cream/90">
+                                "A rare and wonderful thing... so fully realized."
+                            </p>
+                        </div>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="md:text-right space-y-4">
+                            <button class="gold-gradient font-bold py-4 px-10 rounded-lg text-lg inline-block">
+                                PRE-ORDER NOW
+                            </button>
+                            <br class="hidden md:block">
+                            <button id="read-sample-btn" class="border-2 border-gold text-gold font-bold py-4 px-10 rounded-lg text-lg inline-block hover:bg-gold hover:text-charcoal-black transition-all">
+                                READ SAMPLE CHAPTER
+                            </button>
+                        </div>
+                        
+                        <!-- Agent/Publisher Note -->
+                        <p class="text-sm text-cream/60 mt-6">
+                            For publishing inquiries: <a href="#contact" class="text-gold hover:underline">Contact the Author</a>
+                        </p>
+                    </div>
+                    
+                    <!-- Book Image (moved to right) -->
+                    <div class="order-1 md:order-2 text-center md:text-left">
+                        <img src="assets/book.png" 
+                             alt="The Child of Comedy Book" 
+                             class="w-full max-w-md mx-auto md:ml-auto md:mr-0 animate-float shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- [4] Audiobook -->
+        <section id="audiobook" class="py-20 md:py-32 bg-black relative overflow-hidden">
+            <!-- Animated Waveform Background -->
+            <div class="absolute inset-0">
+                <div class="waveform absolute top-1/2 left-0 right-0 transform -translate-y-1/2"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <img src="assets/cover_the_child_of_comedy.png" 
+                     alt="Audiobook Cover" 
+                     class="w-64 h-auto rounded-lg shadow-2xl mx-auto mb-8">
+                
+                <h3 class="font-serif text-4xl text-cream mb-4 font-bold">Narrated in Three Voices</h3>
+                <p class="text-cream/70 text-lg mb-8">An immersive audio experience featuring a full cast.</p>
+                
+                <!-- Custom Audio Player -->
+                <div class="audio-player-container max-w-xl mx-auto bg-black/50 p-6 rounded-lg border border-gold/20 mb-8">
+                    <!-- Chapter Info -->
+                    <div class="chapter-info mb-4 text-center">
+                        <h4 class="text-gold-muted font-serif text-xl mb-1">Chapter 1: The Setup</h4>
+                        <p class="text-cream/60 text-sm">Sample Preview</p>
+                    </div>
+                    
+                    <!-- Hidden Audio Element -->
+                    <audio id="audiobook-player" preload="metadata">
+                        <source src="audio/chapter1_the_setup.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
+                    <!-- Player Controls -->
+                    <div class="player-controls">
+                        <!-- Main Controls Row -->
+                        <div class="controls-main flex items-center gap-4 mb-4">
+                            <!-- Play/Pause Button -->
+                            <button id="play-pause-btn" class="play-btn" aria-label="Play audio">
+                                <svg class="play-icon w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                                <svg class="pause-icon w-12 h-12 hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            
+                            <!-- Progress Container -->
+                            <div class="progress-container flex-1">
+                                <!-- Progress Bar -->
+                                <div class="progress-bar-wrapper">
+                                    <div class="progress-bar bg-cream/20 h-2 rounded-full cursor-pointer relative">
+                                        <div class="progress-bar-fill bg-gold-muted h-2 rounded-full transition-all duration-100" style="width: 0%"></div>
+                                        <div class="progress-bar-handle bg-gold-muted w-4 h-4 rounded-full absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 opacity-0 transition-opacity cursor-grab" style="left: 0%"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Time Display -->
+                                <div class="time-display flex justify-between mt-2 text-sm text-cream/60">
+                                    <span id="current-time">0:00</span>
+                                    <span id="duration">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Secondary Controls Row -->
+                        <div class="controls-secondary flex items-center justify-between">
+                            <!-- Volume Control -->
+                            <div class="volume-control flex items-center gap-2">
+                                <button id="volume-btn" class="text-cream/60 hover:text-gold-muted transition-colors" aria-label="Toggle mute">
+                                    <svg class="volume-icon w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <svg class="mute-icon w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                                <input type="range" id="volume-slider" class="volume-slider w-20" min="0" max="100" value="70" aria-label="Volume">
+                            </div>
+                            
+                            <!-- Playback Speed -->
+                            <select id="speed-select" class="speed-select bg-transparent text-cream/60 text-sm border border-gold/20 rounded px-2 py-1 hover:border-gold-muted focus:border-gold-muted transition-colors" aria-label="Playback speed">
+                                <option value="0.75">0.75x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-2xl text-gold mb-8">$19.99</p>
+                
+                <!-- Removed redundant LISTEN TO SAMPLE button as player has its own controls -->
+            </div>
+        </section>
+
+        <!-- [5] Eight Seconds of Therapy - Watch -->
+        <section id="watch" class="py-20 md:py-32 bg-charcoal-black">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-4xl md:text-5xl text-cream mb-4 font-bold">Eight Seconds of Therapy</h2>
+                    <p class="text-cream/70 text-lg">New clips daily until launch. Click to play.</p>
+                </div>
+                
+                <!-- Video Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Two Comedians Meet -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/Two_comedians_meet.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/Two_comedians_meet.mp4">
+                                <source data-src="assets/Two_comedians_meet.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">Two Comedians Meet</h3>
+                        <p class="text-cream/60 text-sm">The Encounter • 0:08</p>
+                    </div>
+                    
+                    <!-- Table Legs -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/table_legs.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/table_legs.mp4">
+                                <source data-src="assets/table_legs.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">Under the Table</h3>
+                        <p class="text-cream/60 text-sm">Hidden Truths • 0:08</p>
+                    </div>
+                    
+                    <!-- Gerald the Goldfish -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/Gerald_the_Goldfish.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/Gerald_the_Goldfish.mp4">
+                                <source data-src="assets/Gerald_the_Goldfish.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">Gerald's Story</h3>
+                        <p class="text-cream/60 text-sm">#19 • 0:08</p>
+                    </div>
+                    
+                    <!-- Terminal Reality -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/terminal_reality.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/terminal_reality.mp4">
+                                <source data-src="assets/terminal_reality.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">Terminal Reality</h3>
+                        <p class="text-cream/60 text-sm">File Not Found • 0:08</p>
+                    </div>
+                    
+                    <!-- The Palm Restaurant -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/steak_and_egg.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/steak_and_egg.mp4">
+                                <source data-src="assets/steak_and_egg.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">The Showdown</h3>
+                        <p class="text-cream/60 text-sm">Steak vs Fish • 0:08</p>
+                    </div>
+                    
+                    <!-- Storage Unit Discovery -->
+                    <div class="group cursor-pointer video-thumbnail" data-video="assets/storage_shed.mp4">
+                        <div class="relative overflow-hidden rounded-lg shadow-xl">
+                            <video class="w-full h-64 object-cover lazy-video" muted loop preload="none" data-src="assets/storage_shed.mp4">
+                                <source data-src="assets/storage_shed.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/80 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-cream mt-4 font-semibold">The Truth</h3>
+                        <p class="text-cream/60 text-sm">Storage Unit • 0:08</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- [6] Television & Beyond -->
+        <section id="television" class="py-20 md:py-32 relative overflow-hidden">
+            <!-- Background Image -->
+            <div class="absolute inset-0 opacity-30">
+                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=1920" 
+                     alt="Writers room" 
+                     class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black"></div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-4xl md:text-5xl text-cream mb-4 font-bold">Television & Beyond</h2>
+                    <p class="text-cream/70 text-lg">Exploring the universe on screen.</p>
+                </div>
+                
+                <!-- TV Show Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <!-- The Heckler -->
+                    <div class="glass-card p-8 rounded-xl text-center">
+                        <h3 class="font-serif text-2xl text-gold mb-4 font-bold">The Heckler</h3>
+                        <p class="text-cream/80 mb-6 min-h-[60px]">
+                            A shadowy figure critiques life from the back of the room.
+                        </p>
+                        <button class="border border-gold/50 text-gold px-6 py-2 rounded-lg hover:bg-gold hover:text-charcoal-black transition-all duration-300 font-semibold">
+                            PITCH DECK
+                        </button>
+                    </div>
+                    
+                    <!-- Open Mic Night -->
+                    <div class="glass-card p-8 rounded-xl text-center">
+                        <h3 class="font-serif text-2xl text-gold mb-4 font-bold">Open Mic Night</h3>
+                        <p class="text-cream/80 mb-6 min-h-[60px]">
+                            An anthology series where every set tells a much darker story.
+                        </p>
+                        <button class="border border-gold/50 text-gold px-6 py-2 rounded-lg hover:bg-gold hover:text-charcoal-black transition-all duration-300 font-semibold">
+                            PITCH DECK
+                        </button>
+                    </div>
+                    
+                    <!-- #19 -->
+                    <div class="glass-card p-8 rounded-xl text-center">
+                        <h3 class="font-serif text-2xl text-gold mb-4 font-bold">#19</h3>
+                        <p class="text-cream/80 mb-6 min-h-[60px]">
+                            He just wants to find his car. It's a surreal journey home.
+                        </p>
+                        <button class="border border-gold/50 text-gold px-6 py-2 rounded-lg hover:bg-gold hover:text-charcoal-black transition-all duration-300 font-semibold">
+                            PITCH DECK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (for agents) -->
+        <section id="contact" class="py-20 bg-black">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="font-serif text-3xl md:text-4xl text-cream mb-8 font-bold">For Literary Agents & Publishers</h2>
+                <p class="text-cream/70 mb-8 max-w-2xl mx-auto">
+                    "The Child of Comedy" is seeking representation. For manuscript requests and inquiries, please contact:
+                </p>
+                <a href="mailto:contact@dmoberg.com" class="text-gold text-xl hover:underline">contact@dmoberg.com</a>
+            </div>
+        </section>
+
+        <!-- Sample Chapter Modal -->
+        <div id="chapter-modal" class="fixed inset-0" style="z-index: 10000; display: none;">
+            <!-- Backdrop -->
+            <div class="modal-backdrop absolute inset-0 bg-black/80"></div>
+            
+            <!-- Modal Container -->
+            <div class="modal-container absolute inset-5 md:inset-10 lg:inset-20 bg-cream dark:bg-charcoal-black rounded-lg md:rounded-xl overflow-hidden flex flex-col max-w-5xl mx-auto my-auto">
+                <!-- Modal Header -->
+                <div class="modal-header flex items-center justify-between p-4 md:p-6 border-b" style="border-color: rgba(212, 165, 116, 0.2);">
+                    <div class="flex items-center gap-4">
+                        <button id="close-modal" class="text-3xl md:text-4xl leading-none transition-colors" style="color: inherit;" onmouseover="this.style.color='#D4A574'" onmouseout="this.style.color='inherit'" aria-label="Close reader">&times;</button>
+                        <h3 class="text-lg md:text-xl font-serif text-charcoal-black dark:text-cream">Sample Chapter</h3>
+                    </div>
+                    <div class="reader-controls flex items-center gap-2 md:gap-3">
+                        <button id="font-decrease" class="px-3 py-1 rounded border transition-colors text-charcoal-black dark:text-cream" style="border-color: rgba(212, 165, 116, 0.3);" onmouseover="this.style.backgroundColor='rgba(212, 165, 116, 0.1)'" onmouseout="this.style.backgroundColor=''" aria-label="Decrease font size">A-</button>
+                        <button id="font-increase" class="px-3 py-1 rounded border transition-colors text-charcoal-black dark:text-cream" style="border-color: rgba(212, 165, 116, 0.3);" onmouseover="this.style.backgroundColor='rgba(212, 165, 116, 0.1)'" onmouseout="this.style.backgroundColor=''" aria-label="Increase font size">A+</button>
+                        <button id="theme-toggle" class="px-3 py-1 rounded border transition-colors text-charcoal-black dark:text-cream" style="border-color: rgba(212, 165, 116, 0.3);" onmouseover="this.style.backgroundColor='rgba(212, 165, 116, 0.1)'" onmouseout="this.style.backgroundColor=''" aria-label="Toggle theme">🌙</button>
+                    </div>
+                </div>
+                
+                <!-- Chapter Selector -->
+                <div class="chapter-selector flex gap-2 p-4 md:p-6 border-b" style="border-color: rgba(212, 165, 116, 0.2);">
+                    <button data-chapter="prologue" class="chapter-btn active px-4 py-2 rounded-lg font-medium transition-all" style="background-color: var(--gold-muted); color: var(--charcoal-black); border-color: var(--gold-muted);">Prologue</button>
+                    <button data-chapter="chapter1" class="chapter-btn px-4 py-2 rounded-lg border transition-all text-charcoal-black dark:text-cream" style="border-color: rgba(212, 165, 116, 0.3);">Chapter 1</button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body flex-1 overflow-y-auto relative">
+                    <article id="chapter-content" class="chapter-text p-6 md:p-8 lg:p-12 max-w-4xl mx-auto">
+                        <!-- Chapter content will be loaded here -->
+                    </article>
+                </div>
+                
+                <!-- Reading Progress -->
+                <div class="reading-progress-container h-1" style="background-color: rgba(212, 165, 116, 0.2);">
+                    <div class="reading-progress h-full transition-all duration-300" style="width: 0%; background-color: var(--gold-muted);"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- [7] Footer -->
+    <footer class="bg-charcoal-black py-12 border-t border-cream/10">
+        <div class="container mx-auto px-6 text-center">
+            <!-- Social Links -->
+            <div class="flex justify-center space-x-8 mb-6">
+                <a href="#" class="text-cream/60 hover:text-gold transition-colors">Twitter</a>
+                <a href="#" class="text-cream/60 hover:text-gold transition-colors">Instagram</a>
+                <a href="#" class="text-cream/60 hover:text-gold transition-colors">Facebook</a>
+                <a href="#" class="text-cream/60 hover:text-gold transition-colors">LinkedIn</a>
+            </div>
+            
+            <!-- Copyright -->
+            <p class="text-cream/50 mb-2">© 2025 D. Moberg. All Rights Reserved.</p>
+            
+            <!-- Easter Egg -->
+            <p class="text-cream/50 relative inline-block group">
+                Website by a friend.
+                <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-gold text-sm whitespace-nowrap">
+                    Gerald was here (#19)
+                </span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Gerald Easter Egg -->
+    <img id="gerald" src="https://storage.googleapis.com/gemini-prod/images/4ed9b2a7-59f7-41b9-8e42-1e582877a5dd" alt="Gerald">
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-charcoal-black border border-gold/50 rounded-lg p-8 text-center max-w-md transform scale-95 transition-transform duration-300">
+            <p id="message-text" class="text-cream text-xl mb-6"></p>
+            <button id="close-modal" class="gold-gradient text-charcoal-black font-bold py-2 px-8 rounded-lg">OK</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Remove loader immediately when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            // Add loaded class to body
+            document.body.classList.add('loaded');
+            
+            if (loader) {
+                // Hide loader after a short delay
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    loader.style.visibility = 'hidden';
+                    loader.style.pointerEvents = 'none';
+                    // Remove it completely from DOM as extra safety
+                    setTimeout(() => loader.remove(), 100);
+                }, 800);
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Animated Typewriter Banner
+        const banner = document.getElementById('representation-banner');
+        const closeBannerBtn = document.getElementById('close-banner-btn');
+        const typewriterTextElement = document.getElementById('typewriter-text');
+        const textToType = "SEEKING REPRESENTATION • UNPUBLISHED MANUSCRIPT • AGENT INQUIRIES WELCOME";
+        
+        let typeTimeouts = [];
+        let isTyping = false;
+
+        function startTypewriter() {
+            if (!typewriterTextElement || isTyping) return;
+            
+            isTyping = true;
+            let i = 0;
+            typewriterTextElement.textContent = '';
+
+            function typeCharacter() {
+                if (i < textToType.length) {
+                    const char = textToType.charAt(i);
+                    typewriterTextElement.textContent += char;
+                    i++;
+                    
+                    // Enhanced randomization
+                    let delay;
+                    if (char === '•') {
+                        // Longer pause after bullet points
+                        delay = Math.random() * 200 + 300; // 300-500ms
+                    } else if (char === ' ' && i > 1 && textToType.charAt(i-2) === '•') {
+                        // Short pause after bullet + space
+                        delay = Math.random() * 100 + 200; // 200-300ms
+                    } else if (Math.random() < 0.1) {
+                        // Occasional hesitation (10% chance)
+                        delay = Math.random() * 150 + 250; // 250-400ms
+                    } else if (Math.random() < 0.15) {
+                        // Fast bursts (15% chance)
+                        delay = Math.random() * 40 + 40; // 40-80ms
+                    } else {
+                        // Normal typing speed
+                        delay = Math.random() * 80 + 80; // 80-160ms
+                    }
+                    
+                    const timeoutId = setTimeout(typeCharacter, delay);
+                    typeTimeouts.push(timeoutId);
+                } else {
+                    // Typing finished, wait then loop
+                    isTyping = false;
+                    const timeoutId = setTimeout(() => {
+                        startTypewriter();
+                    }, 5000);
+                    typeTimeouts.push(timeoutId);
+                }
+            }
+            
+            typeCharacter();
+        }
+
+        function stopTypewriter() {
+            typeTimeouts.forEach(clearTimeout);
+            typeTimeouts = [];
+            isTyping = false;
+        }
+
+        // Show banner after delay
+        setTimeout(() => {
+            if (banner) {
+                banner.classList.add('visible');
+                startTypewriter();
+            }
+        }, 3000);
+
+        // Banner click to scroll to contact
+        if (banner) {
+            banner.addEventListener('click', (e) => {
+                // Don't scroll if clicking the close button
+                if (e.target === closeBannerBtn || e.target.parentElement === closeBannerBtn) return;
+                
+                e.preventDefault();
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+
+        // Close banner
+        if (closeBannerBtn) {
+            closeBannerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (banner) {
+                    banner.classList.remove('visible');
+                    stopTypewriter();
+                }
+            });
+        }
+
+        // Stevie click counter
+        let stevieClicks = 0;
+        const stevieElement = document.getElementById('stevie-click');
+        
+        stevieElement.addEventListener('click', () => {
+            stevieClicks++;
+            if (stevieClicks === 10) {
+                showMessage("Please stop poking me.");
+                stevieClicks = 0;
+            }
+        });
+
+        // Message modal
+        const messageModal = document.getElementById('message-modal');
+        const messageText = document.getElementById('message-text');
+        const closeModalBtn = document.getElementById('close-modal');
+        
+        function showMessage(message) {
+            messageText.textContent = message;
+            messageModal.classList.remove('opacity-0', 'pointer-events-none');
+            messageModal.querySelector('div').classList.remove('scale-95');
+        }
+        
+        function hideMessage() {
+            messageModal.classList.add('opacity-0', 'pointer-events-none');
+            messageModal.querySelector('div').classList.add('scale-95');
+        }
+        
+        closeModalBtn.addEventListener('click', hideMessage);
+        messageModal.addEventListener('click', (e) => {
+            if (e.target === messageModal) hideMessage();
+        });
+
+        // Quote carousel
+        const quotes = document.querySelectorAll('.quote-item');
+        let currentQuote = 0;
+        
+        // Initialize - hide all except first
+        quotes.forEach((quote, index) => {
+            if (index !== 0) {
+                quote.style.opacity = '0';
+                quote.classList.remove('active');
+            } else {
+                quote.style.opacity = '1';
+                quote.classList.add('active');
+            }
+        });
+        
+        setInterval(() => {
+            // Fade out current
+            quotes[currentQuote].style.opacity = '0';
+            quotes[currentQuote].classList.remove('active');
+            
+            // Move to next
+            currentQuote = (currentQuote + 1) % quotes.length;
+            
+            // Fade in next
+            quotes[currentQuote].style.opacity = '1';
+            quotes[currentQuote].classList.add('active');
+        }, 4000);
+
+        // Konami code Easter egg
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    triggerGerald();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+        
+        function triggerGerald() {
+            const gerald = document.getElementById('gerald');
+            gerald.classList.add('swimming');
+            showMessage("You found Gerald!");
+            
+            setTimeout(() => {
+                gerald.classList.remove('swimming');
+            }, 8000);
+        }
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fade in animations for sections
+            gsap.utils.toArray('section').forEach((section, index) => {
+                // Skip hero section
+                if (index === 0) return;
+                
+                const elements = section.querySelectorAll('h2, h3, p, img, button, .glass-card, .grid > div');
+                
+                gsap.fromTo(elements, 
+                    {
+                        opacity: 0,
+                        y: 50,
+                        scale: 0.95
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.8,
+                        stagger: 0.15,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 85%",
+                            end: "top 20%",
+                            toggleActions: "play none none none",
+                            // markers: true // Uncomment to debug
+                        }
+                    }
+                );
+            });
+
+            // Hero section entrance animation
+            gsap.timeline()
+                .from("#hero h1", { opacity: 0, y: 50, duration: 1.2, ease: "power3.out" })
+                .from("#hero p", { opacity: 0, y: 30, duration: 1, ease: "power3.out" }, "-=0.8")
+                .from("#stevie-click", { opacity: 0, scale: 0.8, duration: 1, ease: "back.out(1.7)" }, "-=0.8")
+                .from("#hero .animate-bounce", { opacity: 0, duration: 1 }, "-=0.5");
+        });
+
+        // Parallax effect for video sections and backgrounds
+        document.addEventListener('DOMContentLoaded', () => {
+            // Subtle parallax for video backgrounds
+            const heroVideo = document.querySelector('#hero video');
+            if (heroVideo) {
+                gsap.to(heroVideo, {
+                    yPercent: 20,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "#hero",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1
+                    }
+                });
+            }
+
+            // Parallax for Story section video - no scale
+            const storyVideo = document.querySelector('#story video');
+            if (storyVideo) {
+                gsap.to(storyVideo, {
+                    yPercent: 15,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "#story",
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1
+                    }
+                });
+            }
+
+            // Very subtle parallax for text content
+            gsap.to("#hero .relative", {
+                yPercent: 10,
+                opacity: 0.8,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#hero",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        // Lazy load videos
+        const lazyVideos = document.querySelectorAll('.lazy-video');
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    const source = video.querySelector('source');
+                    if (source && source.dataset.src) {
+                        source.src = source.dataset.src;
+                        video.src = video.dataset.src;
+                        video.load();
+                        videoObserver.unobserve(video);
+                    }
+                }
+            });
+        }, { rootMargin: '50px' });
+
+        lazyVideos.forEach(video => {
+            videoObserver.observe(video);
+        });
+
+        // Video thumbnail hover play
+        const videoThumbnails = document.querySelectorAll('.video-thumbnail');
+        videoThumbnails.forEach(thumbnail => {
+            const video = thumbnail.querySelector('video');
+            if (video) {
+                thumbnail.addEventListener('mouseenter', () => {
+                    if (video.readyState >= 2) { // Check if video is loaded
+                        video.play();
+                    }
+                });
+                thumbnail.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }
+        });
+
+        // Navigation background opacity on scroll
+        const nav = document.querySelector('nav');
+        
+        ScrollTrigger.create({
+            start: "top top",
+            end: "150px top",
+            onUpdate: (self) => {
+                const opacity = 0.5 + (self.progress * 0.4);
+                nav.style.background = `rgba(26, 26, 26, ${opacity})`;
+                nav.style.borderBottomColor = `rgba(255, 215, 0, ${0.08 + (self.progress * 0.12)})`;
+            }
+        });
+
+        // Sample Chapter Modal Functionality - wrapped in DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('chapter-modal');
+            const readSampleBtn = document.getElementById('read-sample-btn');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            const chapterContent = document.getElementById('chapter-content');
+            const chapterBtns = document.querySelectorAll('.chapter-btn');
+            const fontDecreaseBtn = document.getElementById('font-decrease');
+            const fontIncreaseBtn = document.getElementById('font-increase');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const modalBody = document.querySelector('.modal-body');
+            const progressBar = document.querySelector('.reading-progress');
+            
+            // Only initialize modal if elements exist
+            if (readSampleBtn && modal) {
+
+        // Copyright notice template
+        const copyrightHTML = `
+<div class="chapter-copyright">
+    <hr class="copyright-divider">
+    <div class="copyright-text">
+        THE CHILD OF COMEDY<br>
+        Copyright © 2025 by M. Dwayne Moberg<br><br>
+        All rights reserved. No part of this book may be reproduced in any manner whatsoever without written permission except in the case of brief quotations embodied in critical articles and reviews.<br><br>
+        This is a work of fiction. Names, characters, places, and incidents either are products of the author's imagination or are used fictitiously. Any resemblance to actual persons, living or dead, events, or locales is entirely fictional or coincidental.<br><br>
+        First Edition 2025 - Unpublished, Seeking Representation
+    </div>
+</div>`;
+
+        // Chapter content (stored in JS for simplicity - could be loaded from files)
+        const chapters = {
+            prologue: {
+                title: 'Prologue: The Tofu Joke',
+                subtitle: '',
+                content: `The first rule of comedy is timing. The second rule of comedy is that nobody agrees on the first rule. My problem wasn't timing—I had my father's timing. I had it in my bones, a genetic metronome gifted to me at conception. No, my problem was the words in between the pauses. The jokes. The things that are supposed to make people laugh.
+
+Tonight, the silence was particularly loud. It wasn't the polite silence of a crowd waiting for a punchline. It was the hostile silence of a jury that had already reached a verdict. Guilty of not being funny.
+
+"So, my girlfriend's a vegan," I said into the microphone, my voice echoing slightly in the half-empty room. "Which is great. I love that she cares about animals. But it makes intimacy difficult. The other night she whispered in my ear, 'I want you to do to me what you do to that block of tofu.' So I pressed her between two heavy books for three hours to get the moisture out."
+
+Nothing. Not a chuckle. Not a groan. Just the low hum of the beer fridge and the sound of someone's phone vibrating on a tabletop. From the back of the room, I could feel my father's disappointment. It had a physical weight, like a blanket woven from shame.
+
+"No? Nothing?" I heard myself saying, which was already a violation of the rules. Never acknowledge the silence. But I was drowning and even bad swimmers grab for something. "Maybe you had to be there. And by 'there' I mean having sex with a vegan."
+
+A single cough from table three. Not a laugh-cough. A legitimate respiratory event.
+
+"Okay, let's try this one. So my dad's a comedian too. You might know him. He tells these really... thoughtful jokes. The kind that make you go 'hmm' instead of 'ha.' Growing up with him was weird. Other kids' dads would say 'pull my finger.' My dad would say 'consider the existential implications of flatulence in a godless universe.'"
+
+That got something. Not a laugh exactly, but a rustle. Like leaves thinking about falling but not quite ready to commit.
+
+The spotlight felt like an X-ray, revealing all the places where humor should be but wasn't. I could see my material typed out on the index cards in my jacket pocket, each joke a small failure waiting its turn. The tofu bit had been my opener, my strongest material. It was all downhill from here.
+
+I grabbed the microphone off the stand, as if physical movement could generate momentum. "You know what's weird about being raised by a comedian? You grow up thinking silence is just a really long setup. I spent my entire childhood waiting for the punchline. Still waiting, actually."
+
+From the back of the room, a chair scraped against the floor. I didn't need to look to know it was him. My father, making his exit with the same careful precision he used to craft his pauses. The door opened, letting in a brief splash of street noise—real life leaking into this tomb of failed humor—then closed again.
+
+"And that's my time," I said, though I had three minutes left. "You've been... present. I'll be here all week, whether you come back or not."
+
+I left the stage to the sound of scattered, sympathetic applause—the kind you give to a three-legged dog that's trying really hard to catch a frisbee. The MC was already bounding up, full of the manic energy needed to resurrect a dead room.
+
+"Give it up one more time for Stevie Wright, everybody! Takes guts to follow his old man into the family business. Speaking of family businesses, our next comic recently got fired from his family's mortuary..."
+
+I pushed through the crowd of other comics waiting to go on, each one radiating the specific frequency of desperation mixed with delusional confidence that defines open mics. Their eyes skimmed over me with professional assessment: not a threat, not a success, not worth remembering.
+
+The bathroom was lit by a single, flickering fluorescent bulb that made everyone look like they were dying of something contagious. I splashed water on my face, avoiding my reflection. The graffiti on the mirror offered more laughs than my set: "For a good time, call your mother—she misses you."
+
+The mirror was cracked down the middle, splitting my face into two uneven halves. Two different people staring back, neither of them funny. I thought about all the comedians who'd stood here after bombing, looking at this same broken reflection, trying to figure out who they were supposed to be.
+
+The crack in the mirror had probably been there for years. Someone's fist after a particularly bad set, or maybe just time and neglect doing what they do. But standing there, watching my fractured face flicker in the dying light, I couldn't shake the feeling that the mirror knew something I didn't.
+
+That maybe I'd been looking at myself all wrong.
+
+Maybe the problem wasn't that I was broken.
+
+Maybe the problem was that I'd never been whole to begin with.
+
+${copyrightHTML}`
+            },
+            chapter1: {
+                title: 'Chapter 1: The Setup',
+                subtitle: 'Or: How to Tell a Desperate Man He Has a Son He Already Knows About',
+                content: `The thing about meeting your heroes is that sometimes they're sitting in a Benihana in Las Vegas at two in the afternoon, wearing a leather jacket in the desert, stirring a whiskey sour with a chopstick. This is where I found Andrew Dice Clay, the man I'd made famous, the man who'd made me rich, the man who didn't know I was about to ruin his life. Again.
+
+"Mikey!" He stood up like we were old war buddies, which I suppose we were. The comedy club circuit of the eighties was its own kind of combat. "Look at you! Still got all your hair. Still got that face like a worried accountant."
+
+I had that face because I was worried. I'd been worried since I'd gotten on the plane from Miami. I'd been worried since I'd decided to do this. Actually, I'd been worried since 1991, but who's counting?
+
+"Andrew." I sat down across from him. The hibachi grill between us was cold. Even the Japanese chef had given up on this time slot. "You look good."
+
+"I look like shit and we both know it." He laughed, but it was the laugh he used on stage when a joke didn't land. A placeholder. "But you didn't fly out here to blow smoke up my ass. What's the angle?"
+
+This was the thing about comics. They always knew there was an angle. They were right, but it made normal conversation impossible. Everything was either a setup or a punchline.
+
+"I have a proposition," I said.
+
+"Jesus, we starting already? Can't a guy get some edamame first?" He flagged down a waitress who looked like she'd rather be anywhere else. Nevada had that effect on people. "Sweetheart, bring us everything. And I mean everything. My friend here's buying."
+
+I was buying. I was buying lunch, and I was about to buy a lot more than that.
+
+"So what's this about?" He leaned back, the leather jacket creaking. I wondered if he slept in it. "You managing again? Because I told you, I'm done with managers. I'm done with agents. I'm done with all that Hollywood bullshit."
+
+"It's not about management."
+
+"Then what? You dying? Because if you're dying, I already did that routine. 'My manager's dying,' I said. 'Finally, some good news.' Remember? Killed at the Tropicana."
+
+"I'm not dying."
+
+"Then what?"
+
+The waitress brought sake. Neither of us drank sake, but there it was. Las Vegas was built on giving people things they didn't ask for and charging them for it anyway.
+
+"It's about Stevie," I said.
+
+He didn't move, but something in his face shifted. Like watching a door close from the inside. "Who?"
+
+"Don't," I said. "We're too old for this."
+
+"I don't know any Stevie."
+
+"Your son. Steven Wright Junior. Goes by Stevie."
+
+"Steven Wright's kid? What's that got to do with me?"
+
+This was the dance we did. He knew I knew. I knew he knew I knew. But we had to go through the steps anyway. It was like a joke where everyone knows the punchline but you tell it anyway because the ritual matters more than the surprise.
+
+"He's your son too," I said. "You know it. I know it. Janet knew it."
+
+"Janet's dead." He said it flat, like reading a weather report. Cloudy with a chance of grief.
+
+"Fourteen years now."
+
+"So why we talking about her?"
+
+"Because her son is dying out there. Your son."
+
+He drained his whiskey sour in one pull. The ice clicked against his teeth. "He ain't mine."
+
+"February 15th, 1991. Ring any bells?"
+
+"I don't remember what I had for breakfast."
+
+"Janet's birthday party. Fort Lee. You remember."
+
+He did. I could see it in the way his jaw tightened. Comics have tells just like poker players. Dice's tell was his jaw. When he was about to lose it on stage, really go after someone, his jaw would clench first. It was clenching now.
+
+"That was a mistake," he said finally.
+
+"Most kids are."
+
+"Don't be cute, Mikey. It doesn't suit you."
+
+The waitress brought plates of sushi neither of us would touch. There's something profoundly wrong about eating raw fish in the desert. It's like wearing a tuxedo to the beach. Technically possible, but it misses the point.
+
+"He's been doing stand-up for ten years," I said. "Open mics, showcase spots, all of it. He's got presence. He's got timing. He's got everything except..."
+
+"Except what?"
+
+"Jokes. He can't write a joke to save his life."
+
+Dice laughed. A real laugh this time. "That's beautiful. That's fucking poetry. My kid can't tell a joke. You sure he's mine?"
+
+"I've seen the tapes. He stands like you. Moves like you. He's even got that thing you do with your hands when you're building to a punchline."
+
+"What thing?"
+
+I did the gesture. Like dealing invisible cards.
+
+"I don't do that."
+
+"You've been doing it for forty years."
+
+He was quiet for a moment. Outside, Vegas baked under a sun that didn't care about leather jackets or broken dreams or sons you'd never met.
+
+"What do you want from me?" he asked finally.
+
+"Steven knows."
+
+"Wright? He knows?"
+
+"Janet told him. Before she died."
+
+"And he's cool with it?"
+
+"He's Steven Wright. Nobody knows what he's cool with."
+
+"So what's the ask here, Mikey? What's the angle? Because there's always an angle with you."
+
+I'd practiced this part on the plane. In my hotel room. In the mirror this morning while shaving. But sitting across from him, watching him shrink inside that ridiculous jacket, I realized there was no good way to say it.
+
+"First, you need to see something." I pulled out my phone, found the video I'd saved. "This is from last week. The Comic Strip."
+
+"I don't want to—"
+
+"Just watch."
+
+I hit play. On the tiny screen, Stevie stood on stage, dying. But dying with perfect posture, perfect timing, perfect everything except words that worked.
+
+"So I was thinking about DNA," video-Stevie said. "It's like a recipe, right? But what if your parents are from completely different cookbooks? Like, one's Julia Child and one's... I don't know, whoever wrote the anarchist cookbook. What does that make you? A souffle that explodes?"
+
+The joke didn't land. Not because the premise was bad, but because he was trying so hard to sound like someone else that he forgot to sound like anyone.
+
+Dice watched, his face changing. I saw the moment he recognized the stance, the gesture, the way Stevie shifted his weight before a punchline that never quite arrived.
+
+"Jesus," he whispered. "He moves exactly like..."
+
+"Like you. But he pauses like Steven. He's caught between both of you, trying to be either, succeeding at neither."
+
+"Turn it off."
+
+I did. He sat there, staring at the blank screen like it might replay something different.
+
+"How long has he been doing this?"
+
+"Ten years. Started right after Janet died. Like he was trying to find her in the laughs."
+
+"And he's never... he's never gotten better?"
+
+"He's gotten worse. The more he tries, the further he gets from whatever his voice might be. He's drowning in influences he doesn't even know he has."
+
+Dice was quiet. I'd seen him quiet on stage - the dangerous quiet before he destroyed a heckler. But this was different. This was the quiet of a man doing math he'd spent thirty years avoiding.
+
+"You said Steven knows. About me."
+
+"Janet told him. Right before the end. Said she didn't want to die with secrets."
+
+"But she did anyway."
+
+"She died with fewer secrets. That's something."
+
+"And Wright never... he never reached out?"
+
+"Would you have? If you were him? Raising another man's kid for twenty years, then finding out the truth?"
+
+"I would have killed me."
+
+"He thought about it. He told me that once. Said he spent a week planning how he'd do it. Make it look like an accident. Something poetic. Death by comedy."
+
+"What stopped him?"
+
+"Stevie. Said he couldn't kill the kid's biological father, even if the kid didn't know he had one."
+
+"That's very... evolved of him."
+
+"That's very Steven of him. Overthinking everything until action becomes impossible."
+
+I signaled for another round. Dice needed it. Hell, I needed it, and I'd been living with this knowledge for decades.
+
+"You know what the really fucked up part is?" Dice said. "I kept tabs on him. The kid. Not like, stalking or anything. Just... Google alerts. Every time he performed, I'd know. Every review, every mention. I've got a folder on my laptop. Hundreds of articles about him bombing."
+
+"Why?"
+
+"Because I wanted to see if he'd figure it out. Nature versus nurture, you know? Would he naturally develop my style? Would he sound like me without knowing I existed?"
+
+"And?"
+
+"And he sounds like someone trying to be everyone except himself." He laughed, but it was bitter. "Just like his old man. Both of them."
+
+I'd practiced this part on the plane. In my hotel room. In the mirror this morning while shaving. But sitting across from him, watching him shrink inside that ridiculous jacket, I realized there was no good way to say it.
+
+"I want you and Steven to write for the kid. Together."
+
+He stared at me like I'd suggested we rob a bank. Which would have been easier, honestly.
+
+"You're insane."
+
+"Probably."
+
+"Me and Wright? Together? You know we haven't talked since..."
+
+"Since 1993. The Comedy Store incident."
+
+"He called my act 'aggressive nursery rhymes for emotionally stunted adults.'"
+
+"You threw a bar stool at him."
+
+"I missed."
+
+"Barely."
+
+He shook his head. "Can't be done. We're oil and water. We're... what's the opposite of oil and water?"
+
+"Oil and water is already opposites."
+
+"Then we're that."
+
+"He's already agreed."
+
+This was a lie. Steven had agreed to nothing. I hadn't even called Steven yet. But sometimes you have to lie to tell the truth, and the truth was they both needed this.
+
+"Bullshit."
+
+"Call him if you want."
+
+"I don't have his number."
+
+"I do."
+
+"Of course you do." He looked at me with something between admiration and disgust. "You've been planning this."
+
+"For thirty years."
+
+"Why now?"
+
+"Because the kid's about to quit. Because you're playing Benihanas at two in the afternoon. Because Steven's turning into a ghost. Because Janet asked me to."
+
+"This is crazy," he said.
+
+"Yes."
+
+"It'll never work."
+
+"Probably not."
+
+"Wright hates me."
+
+"He doesn't hate you. He nothing's you. Which is worse."
+
+"I don't know how to write with someone else."
+
+"You'll learn."
+
+"I don't even know the kid."
+
+"You'll meet him."
+
+"What if he hates me?"
+
+"He doesn't know about you. As far as he knows, Steven Wright is his father."
+
+"So we're lying to him?"
+
+"We're helping him. The truth comes later. Or never. That's up to you two."
+
+He picked up a piece of sushi, examined it like evidence, put it back down. "What makes you think this'll work?"
+
+"Because you're both desperate enough to try."
+
+"I'm not desperate."
+
+"Andrew. You're sitting in a Benihana in Vegas at two in the afternoon, drinking whiskey sours with a guy you haven't seen in five years, wearing a leather jacket when it's a hundred and ten outside. You're the dictionary definition of desperate."
+
+He wanted to argue. I could see it building in him like a sneeze. But comics, for all their bluster, know the truth when they hear it. It's what makes them comics.
+
+"When?" he asked.
+
+"Tonight. Eight o'clock. The Palm. Steven's already there."
+
+"You said he agreed to meet."
+
+"I said he agreed. I didn't say to what."
+
+"You're a real piece of work, Mikey."
+
+"I learned from the best."
+
+He stood up, the leather jacket squeaking its protest. "I'm not saying yes."
+
+"I know."
+
+"I'm just saying I'll show up."
+
+"That's all I'm asking."
+
+"And if Wright throws a drink in my face?"
+
+"Then you'll know he cares."
+
+He laughed again. That real laugh that reminded me why I'd believed in him all those years ago. Before the nursery rhymes got mean. Before the leather became armor. Before he chose Dice over Andrew.
+
+"Hey Mikey?"
+
+"Yeah?"
+
+"You think the kid's got it? Really?"
+
+"I think he's got everything but the words. And you two? You've got nothing but words."
+
+He nodded, processing this. Comics understand economy. The perfect joke is the shortest distance between setup and punchline. This was just another kind of joke. A thirty-three-year setup with a punchline none of us could see yet.
+
+"The Palm. Eight o'clock."
+
+"I'll be there."
+
+He walked out without paying. Of course he did. I was buying, remember? I was buying lunch and lies and the chance at redemption. In Vegas, those are the only three things on the menu anyway.
+
+I sat there for another hour, not eating sixty dollars worth of sushi, thinking about Janet. About the letter she'd left me. About the very specific request she'd made.
+
+"Make them help him," she'd written. "But more than that, make them help each other. They need it more than they know."
+
+The waitress came by to clear the plates. "Was everything okay?"
+
+"No," I said. "But it's a start."
+
+She didn't know what to do with that, so she just smiled and walked away. 
+
+Outside, Vegas continued its assault on good taste and common sense. Inside, I sat with my sake and my schemes, wondering if I'd just lit a fuse or a candle. In comedy, as in explosives, it's all about the timing.
+
+At least, that's what Steven Wright would say.
+
+And in three hours, I'd find out if he was right.
+
+${copyrightHTML}`
+            }
+        };
+
+        // Load chapter content
+        function loadChapter(chapterId) {
+            const chapter = chapters[chapterId];
+            if (!chapter) return;
+
+            chapterContent.classList.add('loading');
+            
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                let content = '';
+                if (chapter.title) {
+                    content += `<h1>${chapter.title}</h1>`;
+                }
+                if (chapter.subtitle) {
+                    content += `<h2>${chapter.subtitle}</h2>`;
+                }
+                
+                // Convert line breaks to paragraphs
+                const paragraphs = chapter.content.split('\n\n');
+                paragraphs.forEach(para => {
+                    if (para.trim()) {
+                        content += `<p>${para.trim()}</p>`;
+                    }
+                });
+                
+                chapterContent.innerHTML = content;
+                chapterContent.classList.remove('loading');
+                
+                // Reset scroll position
+                modalBody.scrollTop = 0;
+                updateProgress();
+                
+                // Update active button
+                chapterBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.chapter === chapterId) {
+                        btn.classList.add('active');
+                        // Set active button styles
+                        btn.style.backgroundColor = 'var(--gold-muted)';
+                        btn.style.color = 'var(--charcoal-black)';
+                        btn.style.borderColor = 'var(--gold-muted)';
+                        // Remove hover handlers for active button
+                        btn.onmouseover = null;
+                        btn.onmouseout = null;
+                    } else {
+                        // Set inactive button styles
+                        btn.style.backgroundColor = '';
+                        btn.style.color = '';
+                        btn.style.borderColor = 'rgba(212, 165, 116, 0.3)';
+                        // Add hover handlers for inactive buttons
+                        btn.onmouseover = function() { this.style.backgroundColor = 'rgba(212, 165, 116, 0.1)'; };
+                        btn.onmouseout = function() { this.style.backgroundColor = ''; };
+                    }
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('lastChapter', chapterId);
+            }, 300);
+        }
+
+        // Initialize chapter button hover states
+        function initializeChapterButtons() {
+            chapterBtns.forEach(btn => {
+                if (!btn.classList.contains('active')) {
+                    btn.onmouseover = function() { this.style.backgroundColor = 'rgba(212, 165, 116, 0.1)'; };
+                    btn.onmouseout = function() { this.style.backgroundColor = ''; };
+                }
+            });
+        }
+
+        // Open modal
+        readSampleBtn.addEventListener('click', () => {
+            console.log('Read Sample button clicked!');
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+            
+            // Initialize button states
+            initializeChapterButtons();
+            
+            // Load last read chapter or default to prologue
+            const lastChapter = localStorage.getItem('lastChapter') || 'prologue';
+            loadChapter(lastChapter);
+            
+            // Restore saved preferences
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                updateFontSize();
+            }
+            
+            const savedTheme = localStorage.getItem('readerTheme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggleBtn.textContent = '☀️';
+            }
+        });
+
+        // Close modal
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            
+            // Save reading position
+            const scrollPercent = (modalBody.scrollTop / (modalBody.scrollHeight - modalBody.clientHeight)) * 100;
+            localStorage.setItem('readingPosition', scrollPercent);
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', closeModal);
+
+        // Escape key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Chapter selection
+        chapterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const chapterId = btn.dataset.chapter;
+                loadChapter(chapterId);
+            });
+        });
+
+        // Font size controls
+        let currentFontSize = 100;
+        
+        function updateFontSize() {
+            chapterContent.style.fontSize = currentFontSize + '%';
+            localStorage.setItem('fontSize', currentFontSize);
+        }
+
+        fontDecreaseBtn.addEventListener('click', () => {
+            currentFontSize = Math.max(80, currentFontSize - 10);
+            updateFontSize();
+        });
+
+        fontIncreaseBtn.addEventListener('click', () => {
+            currentFontSize = Math.min(150, currentFontSize + 10);
+            updateFontSize();
+        });
+
+        // Theme toggle
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('readerTheme', isDark ? 'dark' : 'light');
+        });
+
+        // Reading progress
+        function updateProgress() {
+            const scrolled = modalBody.scrollTop;
+            const height = modalBody.scrollHeight - modalBody.clientHeight;
+            const progress = height > 0 ? (scrolled / height) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        }
+
+        modalBody.addEventListener('scroll', updateProgress);
+
+        // Touch gestures for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        modalBody.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        modalBody.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].clientY;
+            
+            // Swipe down to close (only if at top of content)
+            if (modalBody.scrollTop === 0 && touchEndY - touchStartY > 100) {
+                closeModal();
+            }
+        });
+
+        // Prevent body scroll when modal is open
+        modal.addEventListener('wheel', (e) => {
+            if (e.target === modal || e.target === modalBackdrop) {
+                e.preventDefault();
+            }
+        });
+        
+        } // End of if (readSampleBtn && modal)
+        
+        }); // End of DOMContentLoaded for modal functionality
+    </script>
+    
+    <!-- Audio Player JavaScript -->
+    <script src="audio-player.js"></script>
+</body>
+</html>
