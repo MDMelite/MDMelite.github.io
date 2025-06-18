@@ -1162,17 +1162,6 @@
             });
         }
 
-        // Stevie click counter
-        let stevieClicks = 0;
-        const stevieElement = document.getElementById('stevie-click');
-        
-        stevieElement.addEventListener('click', () => {
-            stevieClicks++;
-            if (stevieClicks === 10) {
-                showMessage("Please stop poking me.");
-                stevieClicks = 0;
-            }
-        });
 
         // Message modal
         const messageModal = document.getElementById('message-modal');
@@ -1382,9 +1371,8 @@
             
             // Only initialize modal if elements exist
             if (readSampleBtn && modal) {
-
-        // Copyright notice template
-        const copyrightHTML = `
+                // Copyright notice template
+                const copyrightHTML = `
 <div class="chapter-copyright">
     <hr class="copyright-divider">
     <div class="copyright-text">
@@ -1772,8 +1760,8 @@ ${copyrightHTML}`
             }
         };
 
-        // Load chapter content
-        function loadChapter(chapterId) {
+                // Load chapter content
+                function loadChapter(chapterId) {
             const chapter = chapters[chapterId];
             if (!chapter) return;
 
