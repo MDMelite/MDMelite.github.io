@@ -178,46 +178,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Gerald Animation */
-        @keyframes swim {
-            0% { 
-                left: -200px;
-                bottom: 20%;
-                transform: rotate(0deg);
-            }
-            25% {
-                bottom: 40%;
-                transform: rotate(-10deg);
-            }
-            50% {
-                bottom: 30%;
-                transform: rotate(5deg);
-            }
-            75% {
-                bottom: 50%;
-                transform: rotate(-5deg);
-            }
-            100% { 
-                left: calc(100% + 200px);
-                bottom: 40%;
-                transform: rotate(0deg);
-            }
-        }
 
-        #gerald {
-            position: fixed;
-            width: 150px;
-            left: -200px;
-            bottom: -200px;
-            z-index: 9999;
-            filter: drop-shadow(0 0 10px #0ff);
-            opacity: 0;
-        }
-
-        #gerald.swimming {
-            opacity: 1;
-            animation: swim 8s linear;
-        }
 
         /* Waveform Animation */
         @keyframes wave {
@@ -663,10 +624,10 @@
                         Three comedians walk into a bar. Two are legends. One is their son. This must be some kind of joke.
                     </p>
                     <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto mb-8" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
-                        Stevie Wright is a struggling comedian with his father's (Steven Wright) timing, but none of his own punchlines. His life is upended when a long-buried secret is revealed: his other father is the legendary Andrew Dice Clay. Now, Stevie must become the bridge between two comedy icons who haven't spoken in thirty years.
+                        Stevie Wright is a struggling comedian with his father's (Steven Wright) timing, but none of his own punchlines. His life is upended when a long-buried secret is revealed: his other father is the legendary Andrew Dice Clay. Now, Stevie has become a bridge between two comedy icons who haven't spoken in thirty years.
                     </p>
                     <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto mb-8" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
-                        Thrown into the orbit of two icons who haven't spoken since the night he was conceived, Stevie must do more than just find his own voice; he must survive becoming the bridge between his fathers' thirty years of silence. The story unfolds in a symphony of voices—from Mike, the sardonic manager who orchestrates the chaos; to Stevie himself, the son turning pain into punchlines; to an all-knowing narrator who reveals the one story none of them can tell.
+                        Thrown into their orbit, Stevie must do more than just find his own voice; he must survive becoming the punchline to his fathers' thirty years of silence. The story unfolds in a symphony of voices—from Mike, the sardonic manager who orchestrates the chaos; to Stevie himself, the son turning pain into punchlines; to an all-knowing narrator who reveals the one story none of them can tell.
                     </p>
                     <p class="text-lg md:text-xl text-white/85 leading-relaxed max-w-3xl mx-auto" style="text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
                         <em>The Child of Comedy</em> is a darkly funny and moving father-son story about family, identity, and finding your own voice in the space between silence and a roar.
@@ -1067,8 +1028,6 @@
         </div>
     </footer>
 
-    <!-- Gerald Easter Egg -->
-    <img id="gerald" src="https://storage.googleapis.com/gemini-prod/images/4ed9b2a7-59f7-41b9-8e42-1e582877a5dd" alt="Gerald">
 
     <!-- Message Modal -->
     <div id="message-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -1269,31 +1228,7 @@
             quotes[currentQuote].classList.add('active');
         }, 4000);
 
-        // Konami code Easter egg
-        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        let konamiIndex = 0;
         
-        document.addEventListener('keydown', (e) => {
-            if (e.key === konamiCode[konamiIndex]) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    triggerGerald();
-                    konamiIndex = 0;
-                }
-            } else {
-                konamiIndex = 0;
-            }
-        });
-        
-        function triggerGerald() {
-            const gerald = document.getElementById('gerald');
-            gerald.classList.add('swimming');
-            showMessage("You found Gerald!");
-            
-            setTimeout(() => {
-                gerald.classList.remove('swimming');
-            }, 8000);
-        }
 
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
