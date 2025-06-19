@@ -665,7 +665,7 @@
                         
                         <!-- CTA Buttons -->
                         <div class="md:text-right space-y-4">
-                            <button class="gold-gradient font-bold py-4 px-10 rounded-lg text-lg inline-block">
+                            <button id="preorder-btn" class="gold-gradient font-bold py-4 px-10 rounded-lg text-lg inline-block">
                                 PRE-ORDER NOW
                             </button>
                             <br class="hidden md:block">
@@ -1029,6 +1029,35 @@
         <div class="bg-charcoal-black border border-gold/50 rounded-lg p-8 text-center max-w-md transform scale-95 transition-transform duration-300">
             <p id="message-text" class="text-cream text-xl mb-6"></p>
             <button id="close-modal" class="gold-gradient text-charcoal-black font-bold py-2 px-8 rounded-lg">OK</button>
+        </div>
+    </div>
+
+    <!-- Pre-order Modal -->
+    <div id="preorder-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div id="preorder-modal-backdrop" class="absolute inset-0 bg-black/90 opacity-0 transition-opacity duration-300"></div>
+        
+        <!-- Modal Content -->
+        <div class="modal-content relative bg-charcoal-black border border-gold/50 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-gold/20 to-gold/10 border-b border-gold/30 p-6 flex justify-between items-center">
+                <h3 class="text-2xl font-serif text-gold">The Child of Comedy</h3>
+                <button id="preorder-close-btn" class="text-gold hover:text-cream transition-colors text-3xl leading-none">&times;</button>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="p-6 overflow-y-auto" style="max-height: calc(90vh - 100px);">
+                <!-- Google Form Embed -->
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfmJCulWSxvsO5olrFR6b1EjuHV651k9EuUTqCqB0pYjtaM0A/viewform?embedded=true" 
+                        width="100%" 
+                        height="600" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0"
+                        class="rounded-lg">
+                    Loading…
+                </iframe>
+            </div>
         </div>
     </div>
 
@@ -1952,5 +1981,8 @@ ${copyrightHTML}`
     
     <!-- Audio Player JavaScript -->
     <script src="audio-player.js"></script>
+    
+    <!-- Pre-order Modal JavaScript -->
+    <script src="preorder-modal.js"></script>
 </body>
 </html>
